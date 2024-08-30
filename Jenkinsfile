@@ -19,7 +19,7 @@ pipeline {
                 always {
                     mail to: 's220620441@deakin.edu.au',
                          subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
-                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
+                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details. ${BUILD_LOG, maxLines=9999, escapeHtml=false}"
                 }
             }
         }
