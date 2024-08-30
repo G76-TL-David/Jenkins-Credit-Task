@@ -67,10 +67,17 @@ pipeline {
     post {
         always {
             script {
+                // Capture the log content
                 def logContent = currentBuild.rawBuild.getLog(50).join("\n")
-                mail to: 's220620441@deakin.edu.au',
-                     subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
-                     body: "The entire pipeline has finished with status: ${currentBuild.currentResult}.\n\nLog Output:\n${logContent}\n\nCheck the Jenkins console output for more details."
+
+                // Write the log content to a file
+                writeFile file: 'log.txt', text: logContent
+
+                // Send email with log file attached
+                emailext attachmentsPattern: 'log.txt',
+                         to: 's220620441@deakin.edu.au',
+                         subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
+                         body: "The entire pipeline has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
             }
         }
     }
