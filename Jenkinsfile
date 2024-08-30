@@ -64,20 +64,29 @@ pipeline {
         }
     }
     
-    post {
+   post {
         always {
             script {
+                // Ensure the directory for the log file exists
+                def workspace = pwd()
+                def logFile = "${workspace}/log.txt"
+
                 // Capture the log content
                 def logContent = currentBuild.rawBuild.getLog(50).join("\n")
 
                 // Write the log content to a file
-                writeFile file: 'log.txt', text: logContent
+                writeFile file: logFile, text: logContent
 
-                // Send email with log file attached
-                emailext attachmentsPattern: 'log.txt',
-                         to: 's220620441@deakin.edu.au',
-                         subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
-                         body: "The entire pipeline has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
+                // Ensure the log file was created successfully
+                if (fileExists(logFile)) {
+                    // Send email with log file attached
+                    emailext attachmentsPattern: 'log.txt',
+                             to: 's220620441@deakin.edu.au',
+                             subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
+                             body: "The entire pipeline has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
+                } else {
+                    echo "Log file was not created, email will not include an attachment."
+                }
             }
         }
     }
