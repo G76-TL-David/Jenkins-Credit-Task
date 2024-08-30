@@ -15,6 +15,14 @@ pipeline {
                 // Test tool: JUnit
                 // sh 'mvn test'
             }
+            post {
+                always {
+                    mail to: 's220620441@deakin.edu.au',
+                         subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
+                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}",
+                         attachLog: true
+                }
+            }
         }
         stage('Code Analysis') {
             steps {
@@ -28,6 +36,14 @@ pipeline {
                 echo 'Performing Security Scan...'
                 // Security scan tool: OWASP Dependency-Check
                 // sh 'dependency-check.sh'
+            }
+            post {
+                always {
+                    mail to: 's220620441@deakin.edu.au',
+                         subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
+                         body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}",
+                         attachLog: true
+                }
             }
         }
         stage('Deploy to Staging') {
@@ -53,8 +69,8 @@ pipeline {
     post {
         always {
             mail to: 's220620441@deakin.edu.au',
-                 subject: "Pipeline Status: ${currentBuild.currentResult}",
-                 body: "Pipeline finished with status: ${currentBuild.currentResult}",
+                 subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
+                 body: "The entire pipeline has finished with status: ${currentBuild.currentResult}",
                  attachLog: true
         }
     }
