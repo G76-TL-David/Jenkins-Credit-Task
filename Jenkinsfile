@@ -17,9 +17,28 @@ pipeline {
             }
             post {
                 always {
-                    mail to: 's220620441@deakin.edu.au',
-                         subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
-                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
+                    script {
+                        // Ensure the directory for the log file exists
+                        def workspace = pwd()
+                        def logFile = "${workspace}/unit_test_log.txt"
+
+                        // Capture the log content
+                        def logContent = currentBuild.rawBuild.getLog(50).join("\n")
+
+                        // Write the log content to a file
+                        writeFile file: logFile, text: logContent
+
+                        // Ensure the log file was created successfully
+                        if (fileExists(logFile)) {
+                            // Send email with log file attached
+                            emailext attachmentsPattern: 'unit_test_log.txt',
+                                     to: 's220620441@deakin.edu.au',
+                                     subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
+                                     body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
+                        } else {
+                            echo "Log file was not created, email will not include an attachment."
+                        }
+                    }
                 }
             }
         }
@@ -38,9 +57,28 @@ pipeline {
             }
             post {
                 always {
-                    mail to: 's220620441@deakin.edu.au',
-                         subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
-                         body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
+                    script {
+                        // Ensure the directory for the log file exists
+                        def workspace = pwd()
+                        def logFile = "${workspace}/security_scan_log.txt"
+
+                        // Capture the log content
+                        def logContent = currentBuild.rawBuild.getLog(50).join("\n")
+
+                        // Write the log content to a file
+                        writeFile file: logFile, text: logContent
+
+                        // Ensure the log file was created successfully
+                        if (fileExists(logFile)) {
+                            // Send email with log file attached
+                            emailext attachmentsPattern: 'security_scan_log.txt',
+                                     to: 's220620441@deakin.edu.au',
+                                     subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
+                                     body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
+                        } else {
+                            echo "Log file was not created, email will not include an attachment."
+                        }
+                    }
                 }
             }
         }
@@ -60,33 +98,6 @@ pipeline {
             steps {
                 echo 'Deploying to Production...'
                 // Deploy to a production environment e.g., AWS EC2 instance
-            }
-        }
-    }
-    
-   post {
-        always {
-            script {
-                // Ensure the directory for the log file exists
-                def workspace = pwd()
-                def logFile = "${workspace}/log.txt"
-
-                // Capture the log content
-                def logContent = currentBuild.rawBuild.getLog(50).join("\n")
-
-                // Write the log content to a file
-                writeFile file: logFile, text: logContent
-
-                // Ensure the log file was created successfully
-                if (fileExists(logFile)) {
-                    // Send email with log file attached
-                    emailext attachmentsPattern: 'log.txt',
-                             to: 's220620441@deakin.edu.au',
-                             subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
-                             body: "The entire pipeline has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
-                } else {
-                    echo "Log file was not created, email will not include an attachment."
-                }
             }
         }
     }
