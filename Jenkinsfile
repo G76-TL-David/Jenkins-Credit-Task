@@ -66,9 +66,12 @@ pipeline {
     
     post {
         always {
-            mail to: 's220620441@deakin.edu.au',
-                 subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
-                 body: "The entire pipeline has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
+            script {
+                def logContent = currentBuild.rawBuild.getLog(50).join("\n")
+                mail to: 's220620441@deakin.edu.au',
+                     subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
+                     body: "The entire pipeline has finished with status: ${currentBuild.currentResult}.\n\nLog Output:\n${logContent}\n\nCheck the Jenkins console output for more details."
+            }
         }
     }
 }
