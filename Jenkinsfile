@@ -17,19 +17,9 @@ pipeline {
             }
             post {
                 always {
-                    script {
-                        // Capture and write the log content to a file
-                        def logContent = currentBuild.rawBuild.getLog(50).join("\n")
-                        writeFile file: 'unit_test_log.txt', text: logContent
-
-                        // Send email with log file attached
-                        emailext(
-                            attachmentsPattern: 'unit_test_log.txt',
-                            to: 's220620441@deakin.edu.au',
-                            subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
-                            body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
-                        )
-                    }
+                    mail to: 's220620441@deakin.edu.au',
+                         subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
+                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
                 }
             }
         }
@@ -48,19 +38,9 @@ pipeline {
             }
             post {
                 always {
-                    script {
-                        // Capture and write the log content to a file
-                        def logContent = currentBuild.rawBuild.getLog(50).join("\n")
-                        writeFile file: 'security_scan_log.txt', text: logContent
-
-                        // Send email with log file attached
-                        emailext(
-                            attachmentsPattern: 'security_scan_log.txt',
-                            to: 's220620441@deakin.edu.au',
-                            subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
-                            body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Please see the attached log file for details."
-                        )
-                    }
+                    mail to: 's220620441@deakin.edu.au',
+                         subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
+                         body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
                 }
             }
         }
@@ -80,6 +60,17 @@ pipeline {
             steps {
                 echo 'Deploying to Production...'
                 // Deploy to a production environment e.g., AWS EC2 instance
+            }
+        }
+    }
+    
+    post {
+        always {
+            script {
+                def logContent = currentBuild.rawBuild.getLog(50).join("\n")
+                mail to: 's220620441@deakin.edu.au',
+                     subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
+                     body: "The entire pipeline has finished with status: ${currentBuild.currentResult}.\n\nLog Output:\n${logContent}\n\nCheck the Jenkins console output for more details."
             }
         }
     }
