@@ -17,9 +17,10 @@ pipeline {
             }
             post {
                 always {
-                    emailext to: 'carey.davidj@gmail.com',
+                    emailext to: 's220620441@deakin.edu.au',
                              subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
-                             body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}"
+                             body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}",
+                             attachLog: true
                 }
             }
         }
@@ -38,9 +39,10 @@ pipeline {
             }
             post {
                 always {
-                    emailext to: 'carey.davidj@gmail.com',
+                    emailext to: 's220620441@deakin.edu.au',
                              subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
-                             body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}"
+                             body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}",
+                             attachLog: true
                 }
             }
         }
@@ -67,7 +69,7 @@ pipeline {
     post {
         always {
             emailext attachLog: true,
-                     to: 'carey.davidj@gmail.com',
+                     to: 's220620441@deakin.edu.au',
                      subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
                      body: "The entire pipeline has finished with status: ${currentBuild.currentResult}. The full build log is attached.\n\nCheck the Jenkins console output for more details at: ${env.BUILD_URL}"
         }
