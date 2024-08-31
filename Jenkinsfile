@@ -19,8 +19,7 @@ pipeline {
                 always {
                     emailext to: 'carey.davidj@gmail.com',
                              subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
-                             body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}",
-                             attachLog: true
+                             body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}"
                 }
             }
         }
