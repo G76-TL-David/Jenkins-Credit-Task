@@ -17,10 +17,9 @@ pipeline {
             }
             post {
                 always {
-                    emailext to: 's220620441@deakin.edu.au',
+                    mail to: 's220620441@deakin.edu.au',
                          subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
-                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details.",
-                         attachLog: true
+                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
                 }
             }
         }
@@ -39,10 +38,9 @@ pipeline {
             }
             post {
                 always {
-                    emailext to: 's220620441@deakin.edu.au',
+                    mail to: 's220620441@deakin.edu.au',
                          subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
-                         body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details.",
-                         attachLog: true
+                         body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
                 }
             }
         }
@@ -70,10 +68,9 @@ pipeline {
         always {
             script {
                 def logContent = currentBuild.rawBuild.getLog(50).join("\n")
-                emailext to: 's220620441@deakin.edu.au',
+                mail to: 's220620441@deakin.edu.au',
                      subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
-                     body: "The entire pipeline has finished with status: ${currentBuild.currentResult}.\n\nLog Output:\n${logContent}\n\nCheck the Jenkins console output for more details.",
-                     attachLog: true
+                     body: "The entire pipeline has finished with status: ${currentBuild.currentResult}.\n\nLog Output:\n${logContent}\n\nCheck the Jenkins console output for more details."
             }
         }
     }
