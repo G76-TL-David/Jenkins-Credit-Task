@@ -67,7 +67,7 @@ pipeline {
     post {
         always {
             emailext attachLog: true,
-                     to: 's220620441@deakin.edu.au',
+                     to: 'carey.davidj@gmail.com',
                      subject: "Pipeline Overall Status: ${currentBuild.currentResult}",
                      body: "The entire pipeline has finished with status: ${currentBuild.currentResult}. The full build log is attached.\n\nCheck the Jenkins console output for more details at: ${env.BUILD_URL}"
         }
