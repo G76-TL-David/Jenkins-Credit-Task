@@ -17,9 +17,9 @@ pipeline {
             }
             post {
                 always {
-                    mail to: 's220620441@deakin.edu.au',
-                         subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
-                         body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
+                    emailext to: 's220620441@deakin.edu.au',
+                             subject: "Pipeline - Unit and Integration Tests Stage: ${currentBuild.currentResult}",
+                             body: "The Unit and Integration Tests stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}"
                 }
             }
         }
@@ -38,9 +38,9 @@ pipeline {
             }
             post {
                 always {
-                    mail to: 's220620441@deakin.edu.au',
-                         subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
-                         body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details."
+                    emailext to: 's220620441@deakin.edu.au',
+                             subject: "Pipeline - Security Scan Stage: ${currentBuild.currentResult}",
+                             body: "The Security Scan stage has finished with status: ${currentBuild.currentResult}. Check the Jenkins console output for more details at: ${env.BUILD_URL}"
                 }
             }
         }
